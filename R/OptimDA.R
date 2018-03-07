@@ -23,12 +23,12 @@
 #' ## Load a Dataset
 #' data(AustralianCredit)
 #' ## Generate a Model
-#' modelFit <- Optim.DA(Y~., SpanishCredit, p = 0.7, seed=2018)
+#' modelFit <- Optim.DA(Y~., AustralianCredit, p = 0.7, seed=2018)
 #' modelFit
 #' }
 #'
 #' @export
-Optim.DA <- function (formula, data,p, criteria=c("rmse","success","errorti","errortii"),seed=NULL, ...)
+Optim.DA <- function (formula, data,p, criteria=c("rmse","success","ti_error","tii_error"),seed=NULL, ...)
 {
   if (!requireNamespace("MASS", quietly = TRUE)) {
     stop(crayon::bold(crayon::red("MASS package needed for this function to work. Please install it.")),
@@ -75,8 +75,8 @@ while(k<2){
 summary_models <- data.frame(Model = names(Detect_errors)[Detect_errors!="try-error"],
                              rmse = unlist(rmse),
                              success = unlist(Success_rate),
-                             errorti = unlist(errorti),
-                             errortii = unlist(errortii))
+                             ti_error = unlist(errorti),
+                             tii_error = unlist(errortii))
 
 order_models <- OrderModels(summary_models,criteria)
 

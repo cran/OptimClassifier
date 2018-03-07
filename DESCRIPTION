@@ -1,6 +1,6 @@
 Package: OptimClassifier
 Title: Create the Best Train for Classification Models
-Version: 0.1.0
+Version: 0.1.2
 Authors@R: c(
     person("Agustín", "Pérez-Martín", email = "agustin.perez@umh.es", role = "aut", comment = c(ORCID = "0000-0003-4994-3176")),
     person("Agustín", "Pérez-Torregrosa", email = "agustin.perez01@goumh.umh.es", role = "cre", comment = c(ORCID = "0000-0001-5658-4795")),
@@ -23,7 +23,7 @@ LazyData: true
 RoxygenNote: 6.0.1
 Suggests: testthat, knitr, rmarkdown
 NeedsCompilation: no
-Packaged: 2018-03-03 09:25:08 UTC; agustin
+Packaged: 2018-03-07 17:59:40 UTC; agustin
 Author: Agustín Pérez-Martín [aut] (<https://orcid.org/0000-0003-4994-3176>),
   Agustín Pérez-Torregrosa [cre]
     (<https://orcid.org/0000-0001-5658-4795>),
@@ -32,4 +32,4 @@ Author: Agustín Pérez-Martín [aut] (<https://orcid.org/0000-0003-4994-3176>),
     (<https://orcid.org/0000-0002-6201-7196>)
 Maintainer: Agustín Pérez-Torregrosa <agustin.perez01@goumh.umh.es>
 Repository: CRAN
-Date/Publication: 2018-03-05 18:46:53 UTC
+Date/Publication: 2018-03-07 21:16:35 UTC
