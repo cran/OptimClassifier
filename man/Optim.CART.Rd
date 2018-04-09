@@ -4,8 +4,7 @@
 \alias{Optim.CART}
 \title{Tune CART for the optimal complexity parameter}
 \usage{
-Optim.CART(formula, data, p, criteria = c("success_rate", "ti_error",
-  "tii_error"), seed = NULL, ...)
+Optim.CART(formula, data, p, includedata = FALSE, seed = NULL, ...)
 }
 \arguments{
 \item{formula}{A formula of the form \code{y ~ x1 + x2 + \dots}}
@@ -14,14 +13,14 @@ Optim.CART(formula, data, p, criteria = c("success_rate", "ti_error",
 
 \item{p}{A percentage of training elements}
 
-\item{criteria}{This variable selects the criteria to select the best threshold. The default value is \code{success_rate}.}
+\item{includedata}{logicals. If TRUE the training and testing datasets are returned.}
 
 \item{seed}{a single value, interpreted as an integer, or \code{NULL}. The default value is \code{NULL}, but for future checks of the model or models generated it is advisable to set a random seed to be able to reproduce it.}
 
 \item{...}{arguments passed to \code{\link[rpart]{rpart}}}
 }
 \value{
-An object of class \code{Optim}. See\code{\link{Optim.object}}
+An object of class \code{Optim}. See \code{\link{Optim.object}}
 }
 \description{
 The complexity parameter aims to save computing time by pruning off splits that are obviously not worthwhile. This function starting with null value of \code{cp} and ranks the different possibles levels of pruning trees  find best CART for different levels of cost complexity.

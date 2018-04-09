@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>An Introduction to OptimClassifier</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">An Introduction to OptimClassifier</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#optimclassifier-explained-in-one-minute">OptimClassifier explained in one Minute 🕛</a></li>
+<li><a href="#take-a-quick-look-at-functions">Take a quick look at functions</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#a-simple-example">A simple example</a></li>
+<li><a href="#frequently-answers-questions-faqs">Frequently Answers Questions (FAQs)</a></li>
+<li><a href="#bugs-and-feature-requests">Bugs and feature requests</a></li>
+</ul>
+</div>
+
+<div id="optimclassifier-explained-in-one-minute" class="section level2">
+<h2>OptimClassifier explained in one Minute 🕛</h2>
+<p><strong>OptimClassifier</strong> provides a set of tools for creating models, selecting the best parameters combination for a model, and select the best threshold for your binary classification. The package contains tools for:</p>
+<ul>
+<li>Linear Model (LM)</li>
+<li>Generalized Linear Model (GLM)</li>
+<li>Linear Mixed Model (LMM)</li>
+<li>Classification And Regression Tree (CART)</li>
+<li>Discriminant Analysis (DA)</li>
+<li>Neural Networks (NN)</li>
+<li>Support Vector Machines (SVM)</li>
+</ul>
+</div>
+<div id="take-a-quick-look-at-functions" class="section level2">
+<h2>Take a quick look at functions</h2>
+The main function could summarize in this table:
+<style type="text/css">
+table td {padding: 0px 0px;border-width: 1px; border-style: inset;}
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg {border-style:solid;padding: 0px  0px; border-width:1px; overflow:hidden;word-break:normal;border-color:black;}
+.tgd{border-style:solid;padding: 0px  0px; border-width:1px; overflow:hidden;word-break:normal;border-color:black;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding: 0px 0px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.index-button {border: none;width: 100%; min-width: 50px; padding: 7px 1px;text-align: center;font-weight: bold;text-decoration: none;display: inline-block;font-size: 12px;cursor: pointer;color: black;}
+.index-button:hover {background: grey;color: white;}
+.LM-button {  background-color: #66FF66; }/* Green */
+.LMM-button {background-color: #B2FF66;} /* Green 2 */
+.GLM-button {background-color: #33FF99;} /* Green 3 */ 
+.DA-button {background-color: #FFFF66;} /* Yellow */ 
+.CART-button {background-color: #FFB266;} /* Orange */
+.NN-button {background-color: #99CCFF;} /* Blue */
+.SVM-button {background-color: #CC99FF;} /* Violet */
+.OK-cell {text-align: center;font-size: 18px; padding: 5px 5px;}
+.Functions {text-align: center;font-size: 12px; padding: 5px 5px;}
+
+</style>
+<table class="tg">
+<tr>
+<th class="tg-yw4l">
+</th>
+<th class="tg-yw4l" colspan="7">
+Optim.
+</th>
+</tr>
+<tr>
+<td class="tg-yw4l">
+Method
+</td>
+<td class="tg-yw4l">
+<button class="index-button LM-button">
+LM
+</button>
+</td>
+<td class="tg">
+<button class="index-button GLM-button">
+GLM
+</button>
+</td>
+<td class="tg">
+<button class="index-button LMM-button">
+LMM
+</button>
+</td>
+<td class="tg">
+<button class="index-button DA-button">
+DA
+</button>
+</td>
+<td class="tg">
+<button class="index-button CART-button">
+CART
+</button>
+</td>
+<td class="tg">
+<button class="index-button NN-button">
+NN
+</button>
+<br>
+</td>
+<td class="tg">
+<button class="index-button SVM-button">
+SVM
+</button>
+</td>
+</tr>
+<tr>
+<td class="tg">
+Threshold optimization
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="red">✖️</font>*
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="red">✖️</font>*
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>
+</td>
+</tr>
+<tr>
+<td class="tg">
+Parameter Optimization
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>*
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>*
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>
+</td>
+<td class="tg-yw4l OK-cell">
+<font color="green">✅</font>
+</td>
+</tr>
+<tr>
+<td class="tg">
+What parameter or option?
+</td>
+<td class="Functions">
+<a href="#OptimLM_ask">Transformations</a>
+</td>
+<td class="Functions">
+<a href="#OptimGLM_ask">Family &amp; Links</a>
+</td>
+<td class="Functions">
+<a href="#OptimLMM_ask">Random variable</a>
+</td>
+<td class="Functions">
+<a href="#OptimDA_ask">Linear or Quadratic</a>
+</td>
+<td class="Functions">
+<a href="#OptimCART_ask">CP</a>
+</td>
+<td class="Functions">
+<a href="#OptimNN_ask">Hidden layers</a>
+</td>
+<td class="Functions">
+<a href="#OptimSVM_ask">Kernels</a>
+</td>
+</tr>
+</table>
+<p>*These models are natively classifiers.</p>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<div id="install-this-package-from-cran-stable-version" class="section level3">
+<h3>Install this package from CRAN (stable version):</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">&quot;OptimClassifier&quot;</span>)</a></code></pre></div>
+</div>
+<div id="install-this-package-from-github-development-version" class="section level3">
+<h3>Install this package from Github (development version):</h3>
+<p>For this, you can choose different packages such as:</p>
+<div id="with-devtools" class="section level5">
+<h5>With <a href="https://github.com/hadley/devtools">devtools</a></h5>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(devtools)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">install_github</span>(<span class="st">&quot;economistgame/OptimClassifier&quot;</span>)</a></code></pre></div>
+</div>
+<div id="with-remotes" class="section level5">
+<h5>With <a href="https://github.com/r-lib/remotes">remotes</a></h5>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(remotes)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">install_github</span>(<span class="st">&quot;economistgame/OptimClassifier&quot;</span>)</a></code></pre></div>
+</div>
+</div>
+</div>
+<div id="a-simple-example" class="section level2">
+<h2>A simple example</h2>
+<p>The example shows you how to solve a common credit scoring problem with this package and GLM methodology.</p>
+<p>Firstly, we must load the dataset. In this example, we use <em>Australian Credit</em>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">## Load a Dataset</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">data</span>(AustralianCredit)</a></code></pre></div>
+<p>Then we create a model with the Optim.GLM function (or the one you want).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">## Create the model</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">creditscoring &lt;-<span class="st"> </span><span class="kw">Optim.GLM</span>(Y<span class="op">~</span>., AustralianCredit, <span class="dt">p =</span> <span class="fl">0.7</span>, <span class="dt">seed=</span><span class="dv">2018</span>)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; Warning: Thresholds' criteria not selected. The success rate is defined as the default. </span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></a></code></pre></div>
+<p>Now you can print the results of the models</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">### See a ranking of the models tested</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">print</span>(creditscoring)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; 7 successful models have been tested and 21 thresholds evaluated </span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;  </span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;                Model      rmse Threshold success_rate   ti_error tii_error </span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;  1      poisson(log) 0.3389622      0.50    0.8365385 0.01442308 0.1490385 </span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;  2     poisson(sqrt) 0.3409605      0.55    0.8365385 0.01442308 0.1490385 </span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  3          gaussian 0.3425880      0.60    0.8413462 0.01923077 0.1394231 </span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  4           poisson 0.3430554      0.55    0.8365385 0.01442308 0.1490385 </span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  5 binomial(cloglog) 0.3519640      0.35    0.8269231 0.01923077 0.1538462 </span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  6  binomial(probit) 0.3587217      0.45    0.8221154 0.02403846 0.1538462 </span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  7   binomial(logit) 0.3595036      0.35    0.8173077 0.01923077 0.1634615</span></a></code></pre></div>
+<p>Are you see with a graphic? Try to typping <strong>plot(creditscoring)</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">### Are you bored of R outputs?? Try to plot</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">plot</span>(creditscoring)</a></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA2AAAAEgCAMAAADli+DTAAAC31BMVEUAAAAA/wABAQECAgIDAwMEBAQGBgYHBwcICAgJCQkKCgoLCwsMDAwODg4PDw8QEBASEhITExMUFBQVFRUWFhYXFxcYGBgZGRkaGhobGxscHBwdHR0eHh4fHx8gICAhISEiIiIjIyMkJCQlJSUmJiYnJycpKSkqKiorKyssLCwtLS0uLi4vLy8yMjIzMzM0NDQ1NTU2NjY3Nzc4ODg6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dJSUlLS0tNTU1OTk5PT09QUFBRUVFSUlJTU1NUVFRVVVVXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7/AAD///+mlqUZAAAACXBIWXMAAA7DAAAOwwHHb6hkAAARcUlEQVR4nO3d/2NV9X3H8VuxjXZtrco6p25+afettkHWtVoY7Rw0FsQqAQwYdHGCGBkVMIYiGY0toqGUrrQGkXFVvhQ2W5UavimjNBOB4WTRABGm1lqYIQncnL3/gJ1zz7n35ubCzT03eZ989vH5+iEezz338zrv+7kPc0lsjQkhRC2xwb4BQmwOwAhRDMAIUQzACFEMwAhRDMAIUUxoYKunadwGIXYmNLA5l2jcBiF2BmCEKAZghCgGYIQoBmCEKAZghCgGYIQoBmCEKAZghCgGYIQoBmDE9vxvFDlbOcBI1IlHkR59ACMfqgAsXwBG+hmA5QvASD8DsHwBmHWJ+g0fdR/AyKAm6jd81H0AI4OaqN/wUfcBjAxqon7DR90HMDKoifoNH3UfwEjPRP3+AxjABjVRvx+i7rN+QICFS9T7Y3uf9QP+fwf2kSjyIXo/RN1n/YAAAxjAFPsABjCAKfYBDGAAU+wDGMAAptgHMIABTLEPYAADmGIfwAAGMMU+gAEMYIp9AAMYwBT7AAYwgCn2AQxgAFPsAxjAAKbYBzCAAUyxD2AAA5hiH8AABjDFPoABDGCKfQADGMAU+wAGMIAp9hkLrLmqoqHLO3BWTpn04G8BZmef9QOaCqy9vCWxYIN39O9/fzKx+IcAs7PP+gFNBbajxv0mVu0dHWuR08tWAczOPusHNBXY+qUibZP94y3fnNbu/uWtXbvuuBRgdvVZP6CpwNZ5wCYGf9P+RJ37tbG0tPSPAGZXn/UDmgpsW63Inpne0S+bRFor3IMTbW0z+YhoWZ/1A5oKrH3CUad+rciRzpeqOpxVi/yz/BnMtj7rBzQVmDRPr2o4JVK231l9V2Xd+wCzs8/6AY0FdsYAzLY+6wcEGMAAptgHMIABTLEPYAADmGIfwAAGMMU+gAEMYIp9AAMYwBT7AAYwgCn2AQxgAFPsAxjAAKbYBzCAAUyxD2AAA5hiH8AABjDFPoABDGCKfQADGMAU+wAGMIAp9gEMYABT7AMYwACm2AcwgAFMsQ9gAAOYYh/AAAYwxT6AAQxgin0AAxjAFPsABjCAKfYBDGAAU+wDGMAAptgHMIABTLEPYAADmGIfwAAGMMU+gAEMYIp9AAMYwBT7AAYwgCn2AQxgAFPsAxjAAKbYBzCAAUyxD2AAA5hiH8AABjDFPoABDGCKfQADGMAU+wAGMIAp9gEMYABT7AMYwACm2AcwgAFMsQ9gAAOYYh/AAAYwxT6AAQxgin0AAxjAFPsABjCAKfYBDGAAU+wzAtio/SKJuW0iO/sgBzDb+qwf0AhgsZ0ip2O7AZa7P7b3WT8gwAAGMMU+gAEMYIp9xgJrrqpo6EoeNVVNmvMWwOzss35AU4G1l7ckFmzwjg7deuz0E7MAZmef9QOaAey6srIxsevLyq5LA9tR434Tq/aOmh8XOTwBYHb2WT+gEcDGZZJ6aP1SkbbJwd90fXe5+3VvY+MtlwLMrj7rBzQC2BmyzgM20T9+uXJFwv3L6pEjv3Q5wOzqs35Ak4Ad784cb6sV2TPTO3KWzTqcOstHRNv6rB/QDGC7pjXLiRtiF8xPE2ufcNSpXytypLP57kT6CQCzrc/6AY0Atu2jIw7IPZ9aufj85enHmqdXNZwSKdu/8htjx44tB5idfdYPaASwr1c60n3xPJGHhp3tUoDZ2Wf9gEYAu3iLyKuxVpHnLgBYHGCahVH3GQHs478WWXKle7DpQoDFAaZZGHWfEcA+v0Sca6a6B3NHAiwOMM3CqPuMAPaD82tuiW2Wk8+ULAZYHGCahVH3GQGsu+7qzywUKTun8jTA4gDTLIy6zwhgQV49fObLMgGYbX3WD2gEsL2ZACwOMM3CqPuMABbLBGBxgGkWRt1nBLBLzvnKkv94MxmAxQGmWRh1nxHAul+6949/7+anP8ivC2AW9lk/oBHA3Di/vv9z549dfRxgcYBpFkbdZwowN87e2ks+lo8XwOzrs35Ag4C9XvfFISPy8QKYfX3WD2gKsAMLvnDu15a/nd8XwKzrs35AI4Dtn/8XH71hxbt96AKYhX3WD2gEsFjsy9/9sR+AxQGmWRh1nxHAfj8TgMUBplkYdZ8RwAoOwGzrs35AgAEMYIp9ZgDbXfejI9Kxd93SLwAsDjDNwqj7jAC25pyST12y7aJY7BPDARYHmGZh1H1GAPv8+E7noSHj3nby8wKYfX3WD2gEsJLnRX4T29IXL4DZ12f9gEYAS//niwDWe39s77N+QIABDGCKfQADGMAU+8wANmzUqJGxa0e5AVgcYJqFUfcZAWxCJgCLA0yzMOo+I4AVHIDZ1mf9gAADGMAU+wAGMIAp9gEMYABT7AMYwACm2AcwgAFMsQ9gAAOYYh/AAAYwxT6AAQxgin0AAxjAFPsABjCAKfYBDGAAU+wDGMAAptgHMIABTLEPYAADmGIfwAAGMMU+gAEMYIp9AAMYwBT7AAYwgCn2AQxgAFPsAxjAAKbYBzCAAUyxD2AAA5hiH8AABjDFPmOBNVdVNHT5h4nK4wCztM/6AU0F1l7ekliwIXn47H1jAGZrn/UDmgpsR437Taw6ebjvV2MBZmuf9QOaCmz9UpG2ycHfjE8C2zJ79ujLAGZXn/UDmgpsnQdsYhawTeXlIy8HmF191g9oKrBttSJ7ZmYBEz4i2tdn/YCmAmufcNSpXytypBNgNvdZP6CpwKR5elXDKZGy/QCzuc/6AY0FdsYAzLY+6wcEGMAAptgHMIABTLEPYAADmGIfwAAGMMU+gAEMYIp9AAMYwBT7AAYwgCn2AQxgAFPsAxjAAKbYBzCAAUyxD2AAA5hiH8AABjDFPoABDGCKfQADGMAU+wAGMIAp9gEMYABT7AMYwACm2AcwgAFMsQ9gAAOYYh/AAAYwxT6AAQxgin0AAxjAFPsABjCAKfYBDGAAU+wDGMAAptgHMIABTLEPYAADmGIfwAAGMMU+gAEMYIp9AAMYwBT7AAYwgCn2AQxgAFPsAxjAAKbYBzCAAUyxD2AAA5hiH8AABjDFPoABDGCKfQADGMAU+wAGMIAp9gEMYABT7AMYwACm2AcwgAFMsQ9gAAOYYh/AAAYwxT6AAQxgin0AAxjAFPsABjCAKfYBDGAAU+wDGMAAptgHMIABTLEPYAADmGIfwAAGMMU+Y4E1V1U0dPU6Aph1fdYPaCqw9vKWxIIN2UcAs6/P+gFNBbajxv3WVZ19BDD7+qwf0FRg65eKtE3OOtpUXj7ycoDZ1Wf9gKYCW+exmph19PLChTdedvZnEEKykwfYtlqRPTOzj870EZEQcrbk+yHHhKNO/VqRI52pIy8AI6Tw5P0x/fSqhlMiZftTR14ARkjhGYBfNBNCzhaAEaIYgBGiGIARohiAEaIYgBGimNDAll58Zb/z2av6v0aovqst7/tstH1XW9531QD0VRYLTJbM7m/uKK3q9xphcm/pbZH2zf7S+Gj7Ro2Otm/MiGj7vjU82r4ppTP6vUZj0cD6nz2lr0Xa937pc5H2yV//KNq+KXOi7Zs/Idq+lV+Otm9L6X8P2FoAUwjABjYAC5e3G9+LtK+z8Y1I++Sf90Tb969bo+17aWO0fXtXRdt3qLF9wNYaDGCEfGgCMEIUow7stX/I+/DKNw9W9zq16wXNutxza/rX2I+7MWf9psf6Wi/zUHLDUi9kzu4Vvp1Fd55lkUL2sYjOnIEK7fKjDqzzWL5Hj9bn7ohT049PwH3W5WZs/xqLvxuD1g/eeHnWyzzkbVj6hewb2Flf3KI7z7JIIftYRGfOQIV2+VEA1vRobcW320Q2Tbu97nee945Ft02KB1+Ds63zVsyYtU9kyb7kAP5J56nb714zT+T5pxTr/PPO6oqqp6dLywPL5i75xtyQjekEN+ysnlpZe0z2u7e+sz6r3r2b4MHUHfQ3YaYNs+x3HqiYdchbL/XkYKnZ36uc8+I9t6zrMYq3Ye4LKRvumLLsVM7uFb6dRXQG03vbFlycWaSgfSyiM2egQrv8aAAb94azvlr2Vb7v/PT73u08N6f7t9Un/a/B2dayffLUQpE7270BgpO7Z7SfqnF35L/mK9b551+6+8TpOhfYjZtPuv80CtmYTnDDx2a1O8tWp4D1rHfvJngwdQf9TZhpQy3b6qy/O/nG85+cWmrM693V87r2TZTMKN47zn0hX7nrg85vb8/ZvcK3s4jOYHpv24KLM4sUtI9FdOYMVGiXHw1g3xHpHtf+5CqRdyd5t9NSuWxHV/A1ONtaKbLnQTlZkfxOHJxcvlFku7sjHZMV6/zzDc+KvOoCmyrJFytcYzqpG/5d89q/a0wB61nv7YX/YHAH/U6IaUMtu9Bb9oT3xvOfnFqqSuSxX0jHzT1GcTfMeyF//IxIV1fO7hW+nUV0BtN72xZcnFmkoH0sojNnoEK7/GgAW+B+eLrpxKonRd4rT95OYveKKe/5X4OzrdOT47X7AwQnl20S2REeWLg6//wjPxfZ5wLz/p98igcW3HBL5YaWtT6wpvqs+iSA5IPBHfQ7IaYNtWydt2y798bzn9xjqcc2B2+8YBR3w7wXcvl6kePv5exe4dtZRGcwvbdtwcWZRQoDFr4zZ6DBBzbukGyaIXunHXce/553O2vquxLT/83/GpxNvQf8b8HByR0zOxK1RXxEDFXnn39hxgeJRQGwG51iPyIGN7zhYTlV81M5OKkzMb8+q969m+DBAQMWYtowy950WDbOkswbr8dS6Tdeak7/o9OuGSe75j6bs3uFb2cRncH03rYFF2cWKWgfi+jMGajQLj8awObNmzrrsMjGO6f5fw4/Pq+8YlnC/xqcTb0Hgj9E+iedJ6ZWNy4SeSHcDznC1fnnu1fcdtdPAmDzpodsTCe44d/cd8+Cn005mFhaOWd9fVa9ezfBgwMGLMS0YZZdPOf2+4/2eOP1WCr9xgtGCf7w78TvvO3RRM7uFb6dRXQG0ye3zb84s0hB+1hEZ85AhXb50QD2SOHXZv3o9cAzjrPiaXEeDPVD86LrvBfVT8jGdIIbjjJhplXMGX5knvNiFLedeTv7mH7Aqnp2ZpI1YaFdgwws65eHHfV33Pv9k2F/7Vt0XQZYsb9oDm44yhgC7Ay/9M15MYrbzrydfUyv8C8MnOH9Ga6Lf1WKEMUAjBDFAIwQxQCMEMUAjBDFAIwQxQDMtJTF/IzOe9XWS6/ve6nHt0tHbPcA3RcpKgAzLa/t3LkqtnLnzgN5rxo/uoD/KdhX/1FOzTg0QPdFigrADMze2Ct9XTJ6bgHruMDIIAdgBiYAdu7Or5XJa6Mv+sRXmkVKXv7mBVc+LbL2mvMuf1hGxWJ/Ke/cOvQzt74TXFfy7IhPfvXwjKEXLZbUc0pjsVGn3Y+IqeuylyCRBGAGJgXsTx/YLn8yYvPm677o6rgmvvfmkpNvnHvfrodj2xN/e/9pZ/iwF5uGD3P860r+bGvTH5w358Dt57ybes7p6x9KuMDS12UvMdhDfkgCMAOTAnaPSPcjLSJPXOgCq3G/M8UObo69Ls6/vOl9RNw6pFXkzSFbktdJyT+JVH3OkUOxV9LPcT8iusDS1/VagkQRgBmYFDDvvzvf+fzD3/q0B2yjyLuxgx1jzh/7g+PJP4Mtv8q76Iof+teVPC8y929E/sd9buo5PrD0db2WIFEEYAYmBazJ9VJ6Td32NR6wF5I6RA4+9Fef/FkG2FUNyeuSj8+9IQks/ZyewNzrei1BogjADEwPYJs+3iXyZAbYL+93RG660QO25dxDIq1DXswBln6ODyx9Xa8lSBQBmIHpAWxr7CdvbbjivLaUji2xRa+s/sP5HrDua4c3NV07rDsHWPo5I6cec4Glr+u1BIkiADMwPYA5tUM/Pf4///za9Oe7R6/42GWzupK/B3vnlqFDkz+md6/rCSz9nMYLy5I/pg+u67UEiSIAI0QxACNEMQAjRDEAI0QxACNEMQAjRDEAI0Qx/wcenhRPv0c7xwAAAABJRU5ErkJggg==" /><!-- --> But what is the information (coefficients and others things) of the best model? And the secondth in the rank list?. Simply we can see:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">### Access to summary of the best model</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">summary</span>(creditscoring)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; Call:</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; stats::glm(formula = formula, family = rowfamily, data = training, </span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;     model = FALSE, x = FALSE, y = FALSE)</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; Deviance Residuals: </span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt;      Min        1Q    Median        3Q       Max  </span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; -0.73227  -0.08182  -0.00412   0.10131   0.91599  </span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; Coefficients:</span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;               Estimate Std. Error z value Pr(&gt;|z|)    </span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; (Intercept) -8.844e-02  2.761e-01  -0.320    0.749    </span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; X11          5.292e-05  9.104e-02   0.001    1.000    </span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt; X2          -1.919e-04  4.000e-03  -0.048    0.962    </span></a>
+<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; X3          -2.322e-03  8.483e-03  -0.274    0.784    </span></a>
+<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; X42          3.292e-02  9.671e-02   0.340    0.734    </span></a>
+<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; X43          3.393e-01  7.245e-01   0.468    0.640    </span></a>
+<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt; X52          2.484e-01  5.225e-01   0.475    0.634    </span></a>
+<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt; X53          2.495e-01  5.126e-01   0.487    0.626    </span></a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt; X54          2.198e-01  4.875e-01   0.451    0.652    </span></a>
+<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; X55          2.165e-01  6.225e-01   0.348    0.728    </span></a>
+<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; X56          2.181e-01  5.141e-01   0.424    0.671    </span></a>
+<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt; X57          3.087e-01  5.140e-01   0.601    0.548    </span></a>
+<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt; X58          2.840e-01  4.915e-01   0.578    0.563    </span></a>
+<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt; X59          2.887e-01  5.053e-01   0.571    0.568    </span></a>
+<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt; X510         3.009e-01  5.611e-01   0.536    0.592    </span></a>
+<a class="sourceLine" id="cb8-29" data-line-number="29"><span class="co">#&gt; X511         2.911e-01  4.994e-01   0.583    0.560    </span></a>
+<a class="sourceLine" id="cb8-30" data-line-number="30"><span class="co">#&gt; X512         2.102e-01  9.427e-01   0.223    0.824    </span></a>
+<a class="sourceLine" id="cb8-31" data-line-number="31"><span class="co">#&gt; X513         3.624e-01  4.964e-01   0.730    0.465    </span></a>
+<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; X514         3.864e-01  5.059e-01   0.764    0.445    </span></a>
+<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; X62         -9.621e-02  6.912e-01  -0.139    0.889    </span></a>
+<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; X63         -1.236e-01  7.016e-01  -0.176    0.860    </span></a>
+<a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt; X64         -1.320e-01  4.755e-01  -0.278    0.781    </span></a>
+<a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt; X65         -1.132e-01  4.977e-01  -0.228    0.820    </span></a>
+<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; X67         -6.857e-04  6.103e-01  -0.001    0.999    </span></a>
+<a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt; X68         -1.445e-01  4.777e-01  -0.302    0.762    </span></a>
+<a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt; X69         -2.363e-01  6.580e-01  -0.359    0.720    </span></a>
+<a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt; X7           6.848e-03  1.244e-02   0.551    0.582    </span></a>
+<a class="sourceLine" id="cb8-41" data-line-number="41"><span class="co">#&gt; X81          4.490e-01  9.878e-02   4.545 5.48e-06 ***</span></a>
+<a class="sourceLine" id="cb8-42" data-line-number="42"><span class="co">#&gt; X91          6.807e-02  1.029e-01   0.661    0.508    </span></a>
+<a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt; X10          2.183e-03  8.015e-03   0.272    0.785    </span></a>
+<a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt; X111        -2.626e-02  7.958e-02  -0.330    0.741    </span></a>
+<a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt; X122         3.305e-02  1.626e-01   0.203    0.839    </span></a>
+<a class="sourceLine" id="cb8-46" data-line-number="46"><span class="co">#&gt; X123         4.749e-01  4.169e-01   1.139    0.255    </span></a>
+<a class="sourceLine" id="cb8-47" data-line-number="47"><span class="co">#&gt; X13         -1.577e-04  2.677e-04  -0.589    0.556    </span></a>
+<a class="sourceLine" id="cb8-48" data-line-number="48"><span class="co">#&gt; X14          2.016e-06  7.898e-06   0.255    0.799    </span></a>
+<a class="sourceLine" id="cb8-49" data-line-number="49"><span class="co">#&gt; ---</span></a>
+<a class="sourceLine" id="cb8-50" data-line-number="50"><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></a>
+<a class="sourceLine" id="cb8-51" data-line-number="51"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-52" data-line-number="52"><span class="co">#&gt; (Dispersion parameter for poisson family taken to be 1)</span></a>
+<a class="sourceLine" id="cb8-53" data-line-number="53"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-54" data-line-number="54"><span class="co">#&gt;     Null deviance: 82.130  on 481  degrees of freedom</span></a>
+<a class="sourceLine" id="cb8-55" data-line-number="55"><span class="co">#&gt; Residual deviance: 29.559  on 447  degrees of freedom</span></a>
+<a class="sourceLine" id="cb8-56" data-line-number="56"><span class="co">#&gt; AIC: 1200.4</span></a>
+<a class="sourceLine" id="cb8-57" data-line-number="57"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-58" data-line-number="58"><span class="co">#&gt; Number of Fisher Scoring iterations: 4</span></a>
+<a class="sourceLine" id="cb8-59" data-line-number="59">### Access to summary of the secondth model</a>
+<a class="sourceLine" id="cb8-60" data-line-number="60"><span class="kw">summary</span>(creditscoring,<span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb8-61" data-line-number="61"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-62" data-line-number="62"><span class="co">#&gt; Call:</span></a>
+<a class="sourceLine" id="cb8-63" data-line-number="63"><span class="co">#&gt; stats::glm(formula = formula, family = rowfamily, data = training, </span></a>
+<a class="sourceLine" id="cb8-64" data-line-number="64"><span class="co">#&gt;     model = FALSE, x = FALSE, y = FALSE)</span></a>
+<a class="sourceLine" id="cb8-65" data-line-number="65"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-66" data-line-number="66"><span class="co">#&gt; Deviance Residuals: </span></a>
+<a class="sourceLine" id="cb8-67" data-line-number="67"><span class="co">#&gt;      Min        1Q    Median        3Q       Max  </span></a>
+<a class="sourceLine" id="cb8-68" data-line-number="68"><span class="co">#&gt; -0.73617  -0.08578   0.00034   0.11181   0.92131  </span></a>
+<a class="sourceLine" id="cb8-69" data-line-number="69"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-70" data-line-number="70"><span class="co">#&gt; Coefficients:</span></a>
+<a class="sourceLine" id="cb8-71" data-line-number="71"><span class="co">#&gt;               Estimate Std. Error z value Pr(&gt;|z|)    </span></a>
+<a class="sourceLine" id="cb8-72" data-line-number="72"><span class="co">#&gt; (Intercept)  9.519e-01  1.563e-01   6.092 1.12e-09 ***</span></a>
+<a class="sourceLine" id="cb8-73" data-line-number="73"><span class="co">#&gt; X11          8.678e-04  5.424e-02   0.016    0.987    </span></a>
+<a class="sourceLine" id="cb8-74" data-line-number="74"><span class="co">#&gt; X2          -9.261e-05  2.425e-03  -0.038    0.970    </span></a>
+<a class="sourceLine" id="cb8-75" data-line-number="75"><span class="co">#&gt; X3          -1.450e-03  5.257e-03  -0.276    0.783    </span></a>
+<a class="sourceLine" id="cb8-76" data-line-number="76"><span class="co">#&gt; X42          1.715e-02  5.650e-02   0.304    0.761    </span></a>
+<a class="sourceLine" id="cb8-77" data-line-number="77"><span class="co">#&gt; X43          1.897e-01  4.816e-01   0.394    0.694    </span></a>
+<a class="sourceLine" id="cb8-78" data-line-number="78"><span class="co">#&gt; X52          1.284e-01  3.044e-01   0.422    0.673    </span></a>
+<a class="sourceLine" id="cb8-79" data-line-number="79"><span class="co">#&gt; X53          1.248e-01  2.995e-01   0.417    0.677    </span></a>
+<a class="sourceLine" id="cb8-80" data-line-number="80"><span class="co">#&gt; X54          1.136e-01  2.834e-01   0.401    0.689    </span></a>
+<a class="sourceLine" id="cb8-81" data-line-number="81"><span class="co">#&gt; X55          1.232e-01  3.904e-01   0.315    0.752    </span></a>
+<a class="sourceLine" id="cb8-82" data-line-number="82"><span class="co">#&gt; X56          1.097e-01  3.005e-01   0.365    0.715    </span></a>
+<a class="sourceLine" id="cb8-83" data-line-number="83"><span class="co">#&gt; X57          1.610e-01  3.018e-01   0.533    0.594    </span></a>
+<a class="sourceLine" id="cb8-84" data-line-number="84"><span class="co">#&gt; X58          1.488e-01  2.890e-01   0.515    0.607    </span></a>
+<a class="sourceLine" id="cb8-85" data-line-number="85"><span class="co">#&gt; X59          1.482e-01  2.968e-01   0.500    0.617    </span></a>
+<a class="sourceLine" id="cb8-86" data-line-number="86"><span class="co">#&gt; X510         1.609e-01  3.415e-01   0.471    0.638    </span></a>
+<a class="sourceLine" id="cb8-87" data-line-number="87"><span class="co">#&gt; X511         1.557e-01  2.942e-01   0.529    0.597    </span></a>
+<a class="sourceLine" id="cb8-88" data-line-number="88"><span class="co">#&gt; X512         1.221e-01  6.258e-01   0.195    0.845    </span></a>
+<a class="sourceLine" id="cb8-89" data-line-number="89"><span class="co">#&gt; X513         1.991e-01  2.952e-01   0.674    0.500    </span></a>
+<a class="sourceLine" id="cb8-90" data-line-number="90"><span class="co">#&gt; X514         2.211e-01  3.008e-01   0.735    0.462    </span></a>
+<a class="sourceLine" id="cb8-91" data-line-number="91"><span class="co">#&gt; X62         -5.000e-02  4.211e-01  -0.119    0.905    </span></a>
+<a class="sourceLine" id="cb8-92" data-line-number="92"><span class="co">#&gt; X63         -7.690e-02  4.346e-01  -0.177    0.860    </span></a>
+<a class="sourceLine" id="cb8-93" data-line-number="93"><span class="co">#&gt; X64         -6.665e-02  2.789e-01  -0.239    0.811    </span></a>
+<a class="sourceLine" id="cb8-94" data-line-number="94"><span class="co">#&gt; X65         -5.029e-02  2.933e-01  -0.171    0.864    </span></a>
+<a class="sourceLine" id="cb8-95" data-line-number="95"><span class="co">#&gt; X67          5.441e-03  3.656e-01   0.015    0.988    </span></a>
+<a class="sourceLine" id="cb8-96" data-line-number="96"><span class="co">#&gt; X68         -7.305e-02  2.814e-01  -0.260    0.795    </span></a>
+<a class="sourceLine" id="cb8-97" data-line-number="97"><span class="co">#&gt; X69         -1.321e-01  4.059e-01  -0.326    0.745    </span></a>
+<a class="sourceLine" id="cb8-98" data-line-number="98"><span class="co">#&gt; X7           4.670e-03  8.174e-03   0.571    0.568    </span></a>
+<a class="sourceLine" id="cb8-99" data-line-number="99"><span class="co">#&gt; X81          2.609e-01  5.799e-02   4.499 6.81e-06 ***</span></a>
+<a class="sourceLine" id="cb8-100" data-line-number="100"><span class="co">#&gt; X91          3.587e-02  6.368e-02   0.563    0.573    </span></a>
+<a class="sourceLine" id="cb8-101" data-line-number="101"><span class="co">#&gt; X10          1.979e-03  5.620e-03   0.352    0.725    </span></a>
+<a class="sourceLine" id="cb8-102" data-line-number="102"><span class="co">#&gt; X111        -1.520e-02  4.805e-02  -0.316    0.752    </span></a>
+<a class="sourceLine" id="cb8-103" data-line-number="103"><span class="co">#&gt; X122         1.698e-02  9.119e-02   0.186    0.852    </span></a>
+<a class="sourceLine" id="cb8-104" data-line-number="104"><span class="co">#&gt; X123         2.728e-01  2.656e-01   1.027    0.304    </span></a>
+<a class="sourceLine" id="cb8-105" data-line-number="105"><span class="co">#&gt; X13         -8.530e-05  1.584e-04  -0.539    0.590    </span></a>
+<a class="sourceLine" id="cb8-106" data-line-number="106"><span class="co">#&gt; X14          1.540e-06  5.360e-06   0.287    0.774    </span></a>
+<a class="sourceLine" id="cb8-107" data-line-number="107"><span class="co">#&gt; ---</span></a>
+<a class="sourceLine" id="cb8-108" data-line-number="108"><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></a>
+<a class="sourceLine" id="cb8-109" data-line-number="109"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-110" data-line-number="110"><span class="co">#&gt; (Dispersion parameter for poisson family taken to be 1)</span></a>
+<a class="sourceLine" id="cb8-111" data-line-number="111"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-112" data-line-number="112"><span class="co">#&gt;     Null deviance: 82.13  on 481  degrees of freedom</span></a>
+<a class="sourceLine" id="cb8-113" data-line-number="113"><span class="co">#&gt; Residual deviance: 29.86  on 447  degrees of freedom</span></a>
+<a class="sourceLine" id="cb8-114" data-line-number="114"><span class="co">#&gt; AIC: 1200.7</span></a>
+<a class="sourceLine" id="cb8-115" data-line-number="115"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-116" data-line-number="116"><span class="co">#&gt; Number of Fisher Scoring iterations: 4</span></a></code></pre></div>
+</div>
+<div id="frequently-answers-questions-faqs" class="section level2">
+<h2>Frequently Answers Questions (FAQs)</h2>
+<div id="what-is-optimization" class="section level3">
+<h3>What is optimization?</h3>
+<p>Optimization is the process of modifying your parameters on your train model to improve the quality of your classification model. Based on your goals, optimization can involve ad implementation improvements or changes to your classification model. This package is focused in two questions, the threshold and several options.</p>
+</div>
+<div id="why-optimize-your-classification-model" class="section level3">
+<h3>Why optimize your classification model?</h3>
+<p>Optimizing your classification model is important when you want to completely achieve their potential. Through optimization, you can help improve the root mean square error (RMSE), grow the success rate, or accomplish others of your other goals (minimizing type I error or minimizing type II error).</p>
+</div>
+<div id="how-does-optim.lm-optimize-a-linear-model" class="section level3">
+<h3><a name="OptimLM_ask"></a> How does Optim.LM optimize a Linear Model?</h3>
+<p><strong>Optim.LM</strong> makes transformations of the response variable to improve the precision of the linear model. Then the function searches the best threshold to obtain the best result as possible to your goal.</p>
+<p>Transformation included:</p>
+<ul>
+<li>Linear Model without transformation (LM)</li>
+<li>Square root Linear Model (SQRT.LM)</li>
+<li>Logarithmic Linear Model (LOG.LM)</li>
+</ul>
+</div>
+<div id="how-does-optim.glm-optimize-a-generalized-linear-model" class="section level3">
+<h3><a name="OptimGLM_ask"></a> How does Optim.GLM optimize a Generalized Linear Model?</h3>
+<p><strong>Optim.GLM</strong> tries to change around different types of error distributions (it called <em>family</em> in R) and several transformations of data (it called <em>link</em> in R). Then the function searches the best threshold to obtain the best result as possible to your goal.</p>
+<p>Models trained with this functions:</p>
+<ul>
+<li>gaussian family with identity link</li>
+<li>binomial family with:
+<ul>
+<li>logit link</li>
+<li>probit link</li>
+<li>cloglog link</li>
+</ul></li>
+<li>poisson family with:
+<ul>
+<li>log link</li>
+<li>sqrt link</li>
+<li>identity link</li>
+</ul></li>
+</ul>
+</div>
+<div id="how-does-optim.lmm-optimize-a-linear-mixed-model" class="section level3">
+<h3><a name="OptimLMM_ask"></a> How does Optim.LMM optimize a Linear Mixed Model?</h3>
+<p><strong>Optim.LMM</strong> searches which one of the variables can use as a random variable improving the model precision. Then the function searches the best threshold to obtain the best result as possible to your goal.</p>
+</div>
+<div id="how-does-optim.da-optimize-a-discriminant-analysis" class="section level3">
+<h3><a name="OptimDA_ask"></a> How does Optim.DA optimize a Discriminant Analysis?</h3>
+<p><strong>Optim.DA</strong> tries to train a Quadratic and Linear Discriminant Analysis because sometimes it does not possible trains a QDA for data characteristics.</p>
+</div>
+<div id="how-does-optim.cart-optimize-a-decision-tree" class="section level3">
+<h3><a name="OptimCART_ask"></a> How does Optim.CART optimize a Decision Tree?</h3>
+<p><strong>Optim.CART</strong> focuses on the pruning progress and compares several levels of pruning, for this progress uses a complexity parameter that It is the amount by which splitting that node improved the relative error.</p>
+</div>
+<div id="how-does-optim.nn-optimize-a-neural-network" class="section level3">
+<h3><a name="OptimNN_ask"></a> How does Optim.NN optimize a Neural Network?</h3>
+<p><strong>Optim.NN</strong> searches which the number of hidden layers improves the model precision. Then the function searches the best threshold to obtain the best result as possible to your goal.</p>
+</div>
+<div id="how-does-optim.svm-optimize-a-support-vector-machine" class="section level3">
+<h3><a name="OptimSVM_ask"></a> How does Optim.SVM optimize a Support Vector Machine?</h3>
+<p><strong>Optim.SVM</strong> tries to change around different types of kernels to improve the precision.Then the function searches the best threshold to obtain the best result as possible to your goal.</p>
+<p>Kernels trained with this functions:</p>
+<ul>
+<li>sigmoid kernel</li>
+<li>radial kernel</li>
+<li>polynomial kernel</li>
+<li>linear kernel</li>
+</ul>
+</div>
+</div>
+<div id="bugs-and-feature-requests" class="section level2">
+<h2>Bugs and feature requests</h2>
+<p>If you find problems with the package, or there’s anything that it doesn’t do which you think it should, please submit them to <a href="https://github.com/economistgame/OptimClassifier/issues" class="uri">https://github.com/economistgame/OptimClassifier/issues</a>. In particular, let me know about optimizers and formats which you’d like supported, or if you have a workflow which might make sense for inclusion as a default convenience function.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

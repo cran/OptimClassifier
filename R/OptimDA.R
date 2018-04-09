@@ -7,6 +7,7 @@
 #' @param data Data frame from which variables specified in  \code{formula} are preferentially to be taken.
 #' @param p A percentage of training elements
 #' @param criteria Select criterion to use.
+#' @param includedata logicals. If TRUE the training and testing datasets are returned.
 #' @param seed a single value, interpreted as an integer, or \code{NULL}. The default value is \code{NULL}, but for future checks of the model or models generated it is advisable to set a random seed to be able to reproduce it.
 #' @param ... arguments passed to \code{\link[MASS]{lda}} and \code{\link[MASS]{qda}}
 #'
@@ -14,8 +15,7 @@
 #' a multivariate normal distribution.
 #' LDA differs from QDA in the assumption about the class variability. LDA assumes that all classes share the same within-class covariance matrix whereas QDA allows for distinct within-class covariance matrices.
 #'
-#' @return An object of class \code{Optim}. See\code{\link{Optim.object}}
-
+#' @return An object of class \code{Optim}. See \code{\link{Optim.object}}
 
 
 #' @examples
@@ -28,7 +28,7 @@
 #' }
 #'
 #' @export
-Optim.DA <- function (formula, data,p, criteria=c("rmse","success","ti_error","tii_error"),seed=NULL, ...)
+Optim.DA <- function (formula, data,p, criteria=c("rmse","success_rate","ti_error","tii_error"), includedata=FALSE, seed=NULL, ...)
 {
   if (!requireNamespace("MASS", quietly = TRUE)) {
     stop(crayon::bold(crayon::red("MASS package needed for this function to work. Please install it.")),
@@ -74,7 +74,7 @@ while(k<2){
 }
 summary_models <- data.frame(Model = names(Detect_errors)[Detect_errors!="try-error"],
                              rmse = unlist(rmse),
-                             success = unlist(Success_rate),
+                             success_rate = unlist(Success_rate),
                              ti_error = unlist(errorti),
                              tii_error = unlist(errortii))
 
@@ -84,7 +84,8 @@ ans <- list(Type="DA",
             Models=order_models,
             Model=models,
             Predict=predicts,
-            Confussion_Matrixs=cm
+            Confussion_Matrixs=cm,
+            Data=ifelse(includedata,list(training,testing),list(NULL))
             )
 class(ans) <- "Optim"
 ans

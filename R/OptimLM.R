@@ -6,13 +6,14 @@
 #' @param formula A formula of the form \code{y ~ x1 + x2 + \dots}
 #' @param data Data frame from which variables specified in  \code{formula} are preferentially to be taken.
 #' @param p A percentage of training elements
-#' @param threshold Linear models doesn't return a class, it returns probability because of he must cut by levels.
+#' @param seqthreshold Linear models doesn't return a class, it returns probability because of he must cut by levels. This parameter allows you to select the percentage between one threshold and next evaluated.
 #' @param criteria This variable selects the criteria to select the best threshold. The default value is \code{success_rate}
+#' @param includedata logicals. If TRUE the training and testing datasets are returned.
 #' @param seed a single value, interpreted as an integer, or \code{NULL}. The default value is \code{NULL}, but for future checks of the model or models generated it is advisable to set a random seed to be able to reproduce it.
 #' @param ... arguments passed to \code{\link[stats]{lm}}
 #'
 #'
-#' @return An object of class \code{Optim}. See\code{\link{Optim.object}}
+#' @return An object of class \code{Optim}. See \code{\link{Optim.object}}
 
 #' @examples
 #' if(interactive()){
@@ -33,19 +34,17 @@
 #' }
 #'
 #' @importFrom "nortest" "lillie.test"
-#' @importFrom "car"  "dwt" "ncvTest"
+#' @importFrom "lmtest" "dwtest" "bgtest"
 #' @importFrom "clisymbols" "symbol"
 #' @importFrom "stats" "rstandard"
 #' @importFrom "utils"  "head"  "tail"
 #'
 #' @export
 
-Optim.LM <- function (formula, data,p,threshold=NULL,criteria=c("success_rate","error_ti","error_tii"),seed=NULL,...)
+Optim.LM <- function (formula, data,p, seqthreshold=0.05,criteria=c("success_rate","error_ti","error_tii"),includedata=FALSE,seed=NULL,...)
 {
-  ###Comprobar si variable objetivo tiene 2 o más clases
 
-
-  ##Optain the response variable. Ask to Senior
+  ##Optain the response variable.
   response_variable <- as.character(formula[[2]])
 
   #Detect if Response Variable have more than 2 classes
@@ -80,7 +79,7 @@ Optim.LM <- function (formula, data,p,threshold=NULL,criteria=c("success_rate","
              )
 
 models <- mc_threshold <- thresholds_tested <- newpredict <- rmse <- inference_posibilities <- best_threshold <- list()
-thresholdsused <- seq(0,1,0.05)
+thresholdsused <- seq(0,1,seqthreshold)
 Names  <- as.numeric(names(table(as.numeric(training[ , response_variable]))))
 
 for(i in 1:length(ModelsTested$Model_name)){
@@ -96,32 +95,34 @@ for(i in 1:length(ModelsTested$Model_name)){
   best_threshold[[i]] <- thresholds_tested[[i]][1,]
   ##Para sacar las matrices
   mc_threshold[[i]] <- lapply(results_threshold, function(x) utils::tail(x, 1))
-  # normality_error_test <- nortest::lillie.test(rstandard(  models[[i]]))
-  #
-  # if(normality_error_test$statistic>normality_error_test$p.value){
-  #   Normaltest <- clisymbols::symbol$tick
-  # } else {
-  #   Normaltest <- clisymbols::symbol$warning
-  # }
-  # breusch_pagan <- lmtest::bgtest(  models[[i]]$terms,data =training)
-  # #breusch_pagan <- car::ncvTest(  models[[i]],data=training)
-  # if(breusch_pagan$ChiSquare<breusch_pagan$p){
-  #   Heterocedasticitytest <- clisymbols::symbol$tick
-  # } else {
-  #   Heterocedasticitytest <- clisymbols::symbol$warning
-  # }
-  # #durbin_watson <- lmtest::dwtest(formula = formula, alternative="two.sided", data=training)
-  # durbin_watson <- car::dwt(  models[[i]])
-  # ##Error cuando p-valor es NaN o NA ¿Como resolverlo? => Considerar nuevo escenario==
-  # if(durbin_watson$dw>durbin_watson$p){
-  #   Independency <- clisymbols::symbol$tick
-  # } else {
-  #   Independency <- clisymbols::symbol$warning
-  # }
-  # inference_posibilities[[i]] <- data.frame(e_normality=Normaltest,
-  #            heterocedasticity= Heterocedasticitytest,
-  #            independency=Independency)
 
+  ######### Inference Tests  ########
+  ### Error Normality
+  normality_error_test <- nortest::lillie.test(rstandard(models[[i]]))
+
+   if(normality_error_test$statistic>normality_error_test$p.value){
+     Normaltest <- clisymbols::symbol$tick
+   } else {
+     Normaltest <- clisymbols::symbol$warning
+   }
+  ##Heterocedasticity
+   breusch_pagan <- lmtest::bgtest(models[[i]]$terms,data =training)
+
+   if(breusch_pagan$p.value<breusch_pagan$statistic){
+     Heterocedasticitytest <- clisymbols::symbol$tick
+   } else {
+     Heterocedasticitytest <- clisymbols::symbol$warning
+   }
+   ### Independency test
+  durbin_watson <- lmtest::dwtest(formula = formula, alternative="two.sided", data=training)
+  if(durbin_watson$statistic>durbin_watson$p.value){
+    Independency <- clisymbols::symbol$tick
+  } else {
+    Independency <- clisymbols::symbol$warning
+  }
+  inference_posibilities[[i]] <- data.frame(e_normality=Normaltest,
+                                            heterocedasticity= Heterocedasticitytest,
+                                            independency=Independency)
   }
 
 summary_models <-cbind(data.frame(Model = ModelsTested$Model_name,
@@ -129,13 +130,18 @@ summary_models <-cbind(data.frame(Model = ModelsTested$Model_name,
                        do.call("rbind",best_threshold),
                        List_Position=c(1:length(unlist(rmse))))
 
+inference_posibilities <- cbind(Model = ModelsTested$Model_name,data.frame(do.call("rbind",inference_posibilities)))
+
 models_output <- OrderModels(summary_models,"rmse",desc=FALSE)
+
 ans <- list(Type="LM",
             Models=models_output[,-7],
             Model=models[models_output$List_Position],
             Predict=newpredict[models_output$List_Position],
             Thresholds=thresholds_tested[models_output$List_Position],
-            Confussion_Matrixs=mc_threshold[models_output$List_Position]
+            Confussion_Matrixs=mc_threshold[models_output$List_Position],
+            Data=ifelse(includedata,list(training,testing),list(NULL)),
+            Inference_Tests=inference_posibilities
             )
 class(ans) <- "Optim"
 ans
@@ -144,19 +150,4 @@ return(ans)
 
 
 
-threshold <- function(quantile,y, yhat,categories){
-
-  current_threshold <- min(as.numeric(y)) + (max(as.numeric(y))-min(as.numeric(y)))*quantile
-
-  CutR <- ifelse(yhat >= current_threshold, categories[2], categories[1] )
-  mc_threshold <- MC(y=y, yhat =  CutR)
-  Success_rate_threshold <- (sum(diag(mc_threshold)))/sum(mc_threshold)
-  error_tI_threshold <- sum(mc_threshold[upper.tri(mc_threshold, diag = FALSE)])/sum(mc_threshold)
-  error_tII_threshold <- sum(mc_threshold[lower.tri(mc_threshold, diag = FALSE)])/sum(mc_threshold)
-  return(list(data.frame(threshold=current_threshold,
-                         success_rate=Success_rate_threshold,
-                         ti_error=error_tI_threshold,
-                         tii_error=error_tII_threshold),
-                        mc_threshold))
-}
 

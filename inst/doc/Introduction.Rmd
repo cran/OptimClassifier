@@ -1,0 +1,223 @@
+---
+title: "An Introduction to OptimClassifier"
+output:
+    rmarkdown::html_vignette:
+        toc: true
+        toc_depth: 2
+    highlight: espresso
+    theme: journal
+vignette: >
+  %\VignetteIndexEntry{An Introduction to OptimClassifier}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(OptimClassifier)
+library(ggplot2)
+```
+
+## OptimClassifier explained in one Minute 🕛
+
+**OptimClassifier** provides a set of tools for creating models, selecting the best parameters combination for a model, and select the best threshold for your binary classification. The package contains tools for:
+
+- Linear Model (LM) 
+- Generalized Linear Model (GLM) 
+- Linear Mixed Model (LMM) 
+- Classification And Regression Tree (CART)
+- Discriminant Analysis (DA)
+- Neural Networks (NN)
+- Support Vector Machines (SVM)
+
+## Take a quick look at functions
+
+The main function could summarize in this table:
+<style type="text/css">
+table td {padding: 0px 0px;border-width: 1px; border-style: inset;}
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg {border-style:solid;padding: 0px  0px; border-width:1px; overflow:hidden;word-break:normal;border-color:black;}
+.tgd{border-style:solid;padding: 0px  0px; border-width:1px; overflow:hidden;word-break:normal;border-color:black;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding: 0px 0px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.index-button {border: none;width: 100%; min-width: 50px; padding: 7px 1px;text-align: center;font-weight: bold;text-decoration: none;display: inline-block;font-size: 12px;cursor: pointer;color: black;}
+.index-button:hover {background: grey;color: white;}
+.LM-button {  background-color: #66FF66; }/* Green */
+.LMM-button {background-color: #B2FF66;} /* Green 2 */
+.GLM-button {background-color: #33FF99;} /* Green 3 */ 
+.DA-button {background-color: #FFFF66;} /* Yellow */ 
+.CART-button {background-color: #FFB266;} /* Orange */
+.NN-button {background-color: #99CCFF;} /* Blue */
+.SVM-button {background-color: #CC99FF;} /* Violet */
+.OK-cell {text-align: center;font-size: 18px; padding: 5px 5px;}
+.Functions {text-align: center;font-size: 12px; padding: 5px 5px;}
+
+</style>
+<table class="tg"><tr><th class="tg-yw4l"></th><th class="tg-yw4l" colspan="7">Optim.</th></tr>
+  <tr><td class="tg-yw4l">Method</td><td class="tg-yw4l"><button class="index-button LM-button">LM</button></td>
+<td class="tg"><button class="index-button GLM-button">GLM</button></td>
+<td class="tg"><button class="index-button LMM-button">LMM</button></td>
+<td class="tg"><button class="index-button DA-button">DA</button></td>
+<td class="tg"><button class="index-button CART-button">CART</button></td>
+<td class="tg"><button class="index-button NN-button">NN</button><br></td>
+<td class="tg"><button class="index-button SVM-button">SVM</button></td></tr><tr>
+<td class="tg">Threshold optimization</td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font></td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font></td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font></td>
+<td class="tg-yw4l OK-cell"><font color="red">✖️</font>*</td>
+<td class="tg-yw4l OK-cell"><font color="red">✖️</font>*</td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font></td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font></td></tr><tr>
+<td class="tg">Parameter Optimization</td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font></td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font></td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font></td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font>*</td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font>*</td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font></td>
+<td class="tg-yw4l OK-cell"><font color="green">✅</font></td></tr><tr>
+<td class="tg">What parameter or option?</td>
+<td class="Functions">[Transformations](#OptimLM_ask)</td>
+<td class="Functions">[Family & Links](#OptimGLM_ask)</td>
+<td class="Functions">[Random variable](#OptimLMM_ask)</td>
+<td class="Functions">[Linear or Quadratic](#OptimDA_ask)</td>
+<td class="Functions">[CP](#OptimCART_ask)</td>
+<td class="Functions">[Hidden layers](#OptimNN_ask)</td>
+<td class="Functions">[Kernels](#OptimSVM_ask)</td></tr>
+</table>
+
+*These models are natively classifiers.
+
+## Installation
+
+### Install this package from CRAN (stable version):
+
+```r
+install.packages("OptimClassifier")
+```
+### Install this package from Github (development version):
+
+For this, you can choose different packages such as:
+
+##### With [devtools](https://github.com/hadley/devtools)
+
+```r
+library(devtools)
+install_github("economistgame/OptimClassifier")
+```
+##### With [remotes](https://github.com/r-lib/remotes)
+
+```r
+library(remotes)
+install_github("economistgame/OptimClassifier")
+```
+
+## A simple example
+
+The example shows you how to solve a common credit scoring problem with this package and GLM methodology. 
+
+Firstly, we must load the dataset. In this example, we use _Australian Credit_.
+```{r Paso 1 Example 1 Credit Scoring}
+## Load a Dataset
+data(AustralianCredit)
+```
+
+Then we create a model with the Optim.GLM function (or the one you want). 
+```{r Paso 2 Example 1 Credit Scoring}
+## Create the model
+creditscoring <- Optim.GLM(Y~., AustralianCredit, p = 0.7, seed=2018)
+```
+Now you can print the results of the models
+```{r Paso 3 Example 1 Credit Scoring}
+
+### See a ranking of the models tested
+print(creditscoring)
+```
+Are you see with a graphic? Try to typping __plot(creditscoring)__
+```{r Paso 4 Example 1 Credit Scoring, fig.width=9}
+
+### Are you bored of R outputs?? Try to plot
+plot(creditscoring)
+```
+But what is the information (coefficients and others things) of the best model? And the secondth in the rank list?. Simply we can see:
+```{r Paso 5 Example 1 Credit Scoring}
+### Access to summary of the best model
+summary(creditscoring)
+### Access to summary of the secondth model
+summary(creditscoring,2)
+``` 
+
+
+## Frequently Answers Questions (FAQs)
+
+### What is optimization?
+
+Optimization is the process of modifying your parameters on your train model to improve the quality of your classification model. Based on your goals, optimization can involve ad implementation improvements or changes to your classification model. This package is focused in two questions, the threshold and several options.  
+
+### Why optimize your classification model?
+
+Optimizing your classification model is important when you want to completely achieve their potential. Through optimization, you can help improve the root mean square error (RMSE), grow the success rate, or accomplish others of your other goals (minimizing type I error or minimizing type II error).
+
+### <a name="OptimLM_ask"></a> How does Optim.LM optimize a Linear Model?
+
+**Optim.LM** makes transformations of the response variable to improve the precision of the linear model. Then the function searches the best threshold to obtain the best result as possible to your goal.
+
+Transformation included:
+
+- Linear Model without transformation (LM)
+- Square root Linear Model (SQRT.LM)
+- Logarithmic Linear Model (LOG.LM)
+
+### <a name="OptimGLM_ask"></a> How does Optim.GLM optimize a Generalized Linear Model?
+
+**Optim.GLM** tries to change around different types of error distributions  (it called _family_ in R) and several transformations of data (it called _link_ in R). Then the function searches the best threshold to obtain the best result as possible to your goal. 
+
+Models trained with this functions:
+
+- gaussian family with identity link
+- binomial family with:
+    - logit link
+    - probit link
+    - cloglog link
+- poisson family with:
+    - log link
+    - sqrt link
+    - identity link
+
+### <a name="OptimLMM_ask"></a> How does Optim.LMM optimize a Linear Mixed Model?
+
+**Optim.LMM** searches which one of the variables can use as a random variable improving the model precision. Then the function searches the best threshold to obtain the best result as possible to your goal.
+
+### <a name="OptimDA_ask"></a> How does Optim.DA optimize a Discriminant Analysis?
+
+**Optim.DA** tries to train a Quadratic and Linear Discriminant Analysis because sometimes it does not possible trains a QDA for data characteristics.
+
+### <a name="OptimCART_ask"></a> How does Optim.CART optimize a Decision Tree?
+
+**Optim.CART** focuses on the pruning progress and compares several levels of pruning, for this progress uses a complexity parameter that  It is the amount by which splitting that node improved the relative error.
+
+
+### <a name="OptimNN_ask"></a> How does Optim.NN optimize a Neural Network?
+
+**Optim.NN** searches which the number of hidden layers improves the model precision. Then the function searches the best threshold to obtain the best result as possible to your goal.
+
+
+### <a name="OptimSVM_ask"></a> How does Optim.SVM optimize a Support Vector Machine?
+
+**Optim.SVM** tries to change around different types of kernels to improve the precision.Then the function searches the best threshold to obtain the best result as possible to your goal.
+
+Kernels trained with this functions:
+
+- sigmoid kernel
+- radial kernel
+- polynomial kernel
+- linear kernel
+
+
+## Bugs and feature requests
+
+If you find problems with the package, or there's anything that it doesn't do which you think it should, please submit them to https://github.com/economistgame/OptimClassifier/issues. In particular, let me know about optimizers and formats which you'd like supported, or if you have a workflow which might make sense for inclusion as a default convenience function.
+

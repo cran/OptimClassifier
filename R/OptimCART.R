@@ -7,16 +7,16 @@
 #' @param formula A formula of the form \code{y ~ x1 + x2 + \dots}
 #' @param data Data frame from which variables specified in  \code{formula} are preferentially to be taken.
 #' @param p A percentage of training elements
-#' @param criteria This variable selects the criteria to select the best threshold. The default value is \code{success_rate}.
+#' @param includedata logicals. If TRUE the training and testing datasets are returned.
 #' @param seed a single value, interpreted as an integer, or \code{NULL}. The default value is \code{NULL}, but for future checks of the model or models generated it is advisable to set a random seed to be able to reproduce it.
 #' @param ... arguments passed to \code{\link[rpart]{rpart}}
 #'
 #'
-#' @return An object of class \code{Optim}. See\code{\link{Optim.object}}
+#' @return An object of class \code{Optim}. See \code{\link{Optim.object}}
 #'
 #'@details  Classification And Regression Tree (CART) are a decision tree learning technique that produces either classification or regression trees, first introduced by
-#'Breiman et al.(1984). Trees used for regression and trees used for classification have some similarities -
-#'but also some differences, such as the procedure used to determine where to split.
+#' Breiman et al.(1984). Trees used for regression and trees used for classification have some similarities -
+#' but also some differences, such as the procedure used to determine where to split.
 
 #' @references Breiman L., Friedman J. H., Olshen R. A., and Stone, C. J. (1984) Classification and Regression Trees. Wadsworth.
 
@@ -31,7 +31,7 @@
 #'
 #'@importFrom "stats" "predict"
 #' @export
-Optim.CART <- function (formula, data,p,criteria=c("success_rate","ti_error","tii_error"),seed=NULL,...)
+Optim.CART <- function (formula, data,p,includedata=FALSE, seed=NULL,...)
 {
   #Protect if it doesn't install Rpart
   if (!requireNamespace("rpart", quietly = TRUE)) {
@@ -82,7 +82,10 @@ Optim.CART <- function (formula, data,p,criteria=c("success_rate","ti_error","ti
              Models=SummaryTrees[,-7],
              Model=newtree[models_output$List_Position],
              Predict=newpredict[models_output$List_Position],
-             Confussion_Matrixs=mc[models_output$List_Position])
+             Confussion_Matrixs=mc[models_output$List_Position],
+             Data=ifelse(includedata,list(training,testing),list(NULL))
+            )
+
  class(ans) <- "Optim"
 ans
 

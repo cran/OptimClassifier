@@ -2,8 +2,8 @@
 
 
 ## Styles
-VersionMajor <- R.Version()$major
-VersionMinor <- R.Version()$minor
+#VersionMajor <- R.Version()$major
+#VersionMinor <- R.Version()$minor
 
 warningstyle <- crayon::make_style(WarningStyle = rgb(1,0.2,0), bg = FALSE)
 errorstyle <- crayon::make_style(ErrorStyle = "red", bg = FALSE)
@@ -25,8 +25,8 @@ OrderThresholds <- function(summary_table,column){
   }
   switch(column,
     "success_rate"= {order_summary <- dplyr::arrange(summary_table, dplyr::desc(get(column)))},
-    "error_ti" ={order_summary <- dplyr::arrange(summary_table, get(column))},
-    "error_tii" ={order_summary <- dplyr::arrange(summary_table, get(column))}
+    "ti_error" ={order_summary <- dplyr::arrange(summary_table, get(column))},
+    "tii_error" ={order_summary <- dplyr::arrange(summary_table, get(column))}
   )
   return(order_summary)
 }

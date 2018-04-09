@@ -5,7 +5,7 @@
 \title{Discover the best SVM for your data}
 \usage{
 Optim.SVM(formula, data, p, criteria = c("rmse", "success", "ti_error",
-  "tii_error"), seed = NULL, ...)
+  "tii_error"), includedata = FALSE, seed = NULL, ...)
 }
 \arguments{
 \item{formula}{A formula of the form \code{y ~ x1 + x2 + \dots}}
@@ -16,23 +16,28 @@ Optim.SVM(formula, data, p, criteria = c("rmse", "success", "ti_error",
 
 \item{criteria}{This variable selects the criteria to select the best threshold. The default value is \code{success_rate}.}
 
+\item{includedata}{logicals. If TRUE the training and testing datasets are returned.}
+
 \item{seed}{a single value, interpreted as an integer, or \code{NULL}. The default value is \code{NULL}, but for future checks of the model or models generated it is advisable to set a random seed to be able to reproduce it.}
 
 \item{...}{arguments passed to \code{\link[e1071]{svm}}}
 }
 \value{
-An object of class \code{Optim}. See\code{\link{Optim.object}}
+An object of class \code{Optim}. See \code{\link{Optim.object}}
 }
 \description{
 This function allows to find the best kernel for tune your support vector machine (SVM).
 }
 \examples{
 if(interactive()){
+
 ## Load a Dataset
 data(AustralianCredit)
+
 ## Generate a model
 modelFit <- Optim.SVM(Y~., AustralianCredit, p = 0.7, seed=2018)
 modelFit
+
 }
 
 }

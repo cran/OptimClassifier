@@ -5,7 +5,7 @@
 \title{Find out what is the error distribution and link function that best fits a classification generalized linear model to your data}
 \usage{
 Optim.GLM(formula, data, p, criteria = c("success_rate", "ti_error",
-  "tii_error"), seed = NULL, ...)
+  "tii_error"), includedata = FALSE, seed = NULL, ...)
 }
 \arguments{
 \item{formula}{A formula of the form \code{y ~ x1 + x2 + \dots}}
@@ -16,12 +16,14 @@ Optim.GLM(formula, data, p, criteria = c("success_rate", "ti_error",
 
 \item{criteria}{This variable selects the criteria to select the best threshold. The default value is \code{success_rate}}
 
+\item{includedata}{logicals. If TRUE the training and testing datasets are returned.}
+
 \item{seed}{a single value, interpreted as an integer, or \code{NULL}. The default value is \code{NULL}, but for future checks of the model or models generated it is advisable to set a random seed to be able to reproduce it.}
 
 \item{...}{arguments passed to \code{\link[stats]{glm}}}
 }
 \value{
-An object of class \code{Optim}. See\code{\link{Optim.object}}
+An object of class \code{Optim}. See \code{\link{Optim.object}}
 }
 \description{
 \code{Optim.GLM} is used to fit the best classification \code{GLM} to a dataset. For this purpose, we examine the variation of the precision using the root mean square error (RMSE) when different error distribution and link function was used in the model. In addition, several thresholds are applied to check which is the most optimal cut for the indicators derived from the confusion matrix (success rate, type I error and type II error) according to a given criterion.
