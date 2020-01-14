@@ -4,7 +4,8 @@
 \alias{print.Optim}
 \title{Print an Optim Object}
 \usage{
-\method{print}{Optim}(x, plain = FALSE, digits = getOption("digits"), ...)
+\method{print}{Optim}(x, plain = FALSE, digits = getOption("digits"),
+  ...)
 }
 \arguments{
 \item{x}{object of class "Optim"}

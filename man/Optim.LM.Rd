@@ -4,8 +4,9 @@
 \alias{Optim.LM}
 \title{Find out what is the transformation of the response variable that best fits a classification linear model to your data}
 \usage{
-Optim.LM(formula, data, p, seqthreshold = 0.05, criteria = c("success_rate",
-  "error_ti", "error_tii"), includedata = FALSE, seed = NULL, ...)
+Optim.LM(formula, data, p, seqthreshold = 0.05,
+  criteria = c("success_rate", "error_ti", "error_tii"),
+  includedata = FALSE, seed = NULL, ...)
 }
 \arguments{
 \item{formula}{A formula of the form \code{y ~ x1 + x2 + \dots}}

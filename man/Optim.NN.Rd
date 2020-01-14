@@ -5,8 +5,8 @@
 \title{Discover the best Neural Network for your data}
 \usage{
 Optim.NN(formula, data, p, criteria = c("success_rate", "ti_error",
-  "tii_error"), includedata = FALSE, seed = NULL, maxhiddenlayers = 10,
-  maxit = 500, MaxNWts = 2000, ...)
+  "tii_error"), includedata = FALSE, seed = NULL,
+  maxhiddenlayers = 10, maxit = 500, MaxNWts = 2000, ...)
 }
 \arguments{
 \item{formula}{A formula of the form \code{y ~ x1 + x2 + \dots}}
